@@ -1,7 +1,4 @@
 const router = require('express').Router();
-const {
-  celebrate, Joi,
-} = require('celebrate');
 
 const {
   createUser, authorizeUser,

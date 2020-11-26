@@ -21,7 +21,7 @@ module.exports.createUser = (req, res, next) => {
       name,
       password: hash,
     }))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'MongoError') {
         throw new BadRequestError('Data validation failed:  user cannot be created');
