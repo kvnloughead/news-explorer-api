@@ -1,5 +1,6 @@
 const NotFoundError = require('../errors/NotFoundError');
 const User = require('../models/user');
+const { ERROR_MESSAGES } = require('../utils/constants');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({}).select('+password')
@@ -16,7 +17,7 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'TypeError') {
-        throw new NotFoundError('User not found.');
+        throw new NotFoundError(ERROR_MESSAGES.userNotFound);
       }
       next(err);
     })

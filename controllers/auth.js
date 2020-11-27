@@ -6,6 +6,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const User = require('../models/user');
+const { ERROR_MESSAGES } = require('../utils/constants');
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -24,10 +25,10 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.message.includes('duplicate key error')) {
-        throw new BadRequestError('That email is already in use.');
+        throw new BadRequestError(ERROR_MESSAGES.emailNotUnique);
       }
       if (err.name === 'ValidationError' || err.name === 'MongoError') {
-        throw new BadRequestError('Data validation failed:  user cannot be created');
+        throw new BadRequestError(ERROR_MESSAGES.userBadRequest);
       }
       next(err);
     })
@@ -39,7 +40,7 @@ module.exports.authorizeUser = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Incorrect password or email.');
+        throw new UnauthorizedError(ERROR_MESSAGES.badCredentials);
       } else {
         req._id = user._id;
         return bcrypt.compare(password, user.password);
@@ -47,7 +48,7 @@ module.exports.authorizeUser = (req, res, next) => {
     })
     .then((matched) => {
       if (!matched) {
-        throw new UnauthorizedError('Incorrect password or email.');
+        throw new UnauthorizedError(ERROR_MESSAGES.badCredentials);
       }
       const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.header('authorization', `Bearer ${token}`);

@@ -2,7 +2,9 @@ const BadRequestError = require('../errors/BadRequestError');
 const InternalServerError = require('../errors/InternalServerError');
 const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+
 const Article = require('../models/article');
+const { ERROR_MESSAGES } = require('../utils/constants');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -10,7 +12,7 @@ module.exports.getArticles = (req, res, next) => {
       res.status(200).send(articles);
     })
     .catch(() => {
-      throw new InternalServerError('An error has occured on the server');
+      throw new InternalServerError(ERROR_MESSAGES.internalServer);
     })
     .catch(next);
 };
@@ -34,7 +36,7 @@ module.exports.createArticle = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Data validation failed:  article cannot be created.');
+        throw new BadRequestError(ERROR_MESSAGES.articleBadRequest);
       }
     })
     .catch(next);
@@ -48,14 +50,14 @@ module.exports.deleteArticleById = (req, res, next) => {
           res.status(200).send(deletedArticle);
         });
       } else if (!article) {
-        throw new NotFoundError('Card not found.');
+        throw new NotFoundError(ERROR_MESSAGES.articleNotFound);
       } else {
-        throw new UnauthorizedError('Authorization required.  You can only delete your own cards.');
+        throw new UnauthorizedError(ERROR_MESSAGES.ownedArticlesOnly);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new NotFoundError('Card not found.');
+        throw new NotFoundError(ERROR_MESSAGES.articleNotFound);
       }
       next(err);
     })
