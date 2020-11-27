@@ -23,6 +23,9 @@ module.exports.createUser = (req, res, next) => {
     }))
     .then((user) => res.status(201).send(user))
     .catch((err) => {
+      if (err.message.includes('duplicate key error')) {
+        throw new BadRequestError('That email is already in use.');
+      }
       if (err.name === 'ValidationError' || err.name === 'MongoError') {
         throw new BadRequestError('Data validation failed:  user cannot be created');
       }
