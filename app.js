@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const bodyParser = require('body-parser');
+const path = require('path');
 const {
   errors, isCelebrateError,
 } = require('celebrate');
+
 const BadRequestError = require('./errors/BadRequestError');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const routes = require('./routes/index.js');
 
@@ -15,6 +17,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(errorLogger);
+app.use(requestLogger);
 
 mongoose.connect('mongodb://127.0.0.1:27017/articlesdb', {
   useNewUrlParser: true,

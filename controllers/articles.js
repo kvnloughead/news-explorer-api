@@ -7,7 +7,7 @@ const Article = require('../models/article');
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
     .then((articles) => {
-      res.send(articles);
+      res.status(200).send(articles);
     })
     .catch(() => {
       throw new InternalServerError('An error has occured on the server');
@@ -30,7 +30,7 @@ module.exports.createArticle = (req, res, next) => {
     owner: req.user._id,
   })
     .then((article) => {
-      res.send(article);
+      res.status(201).send(article);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -45,7 +45,7 @@ module.exports.deleteArticleById = (req, res, next) => {
     .then((article) => {
       if (article && req.user._id.toString() === article.owner.toString()) {
         Article.deleteOne(article).then((deletedArticle) => {
-          res.send(deletedArticle);
+          res.status(200).send(deletedArticle);
         });
       } else if (!article) {
         throw new NotFoundError('Card not found.');

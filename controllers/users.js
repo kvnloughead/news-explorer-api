@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({}).select('+password')
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
@@ -11,7 +11,7 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.id === 'me' ? req.user._id : req.params.id).select('+password')
     .then((user) => {
       if (user) {
-        res.send(user);
+        res.status(200).send(user);
       }
     })
     .catch((err) => {
