@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
-const { handleErrors } = require('./errors/errors.js');
+const { handleErrors } = require('./middleware/errors.js');
 
 const routes = require('./routes/index.js');
 
@@ -29,6 +29,9 @@ app.use('/', routes);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res) => {
+  res.status(404).json({ message: 'Requested resource not found' });
+});
 app.use(handleErrors);
 
 app.listen(PORT, () => {
