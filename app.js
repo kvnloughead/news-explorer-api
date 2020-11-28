@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 const path = require('path');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
@@ -16,8 +17,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
-app.use(limiter);
+app.use(helmet());
 
+app.use(limiter);
 app.use(errorLogger);
 app.use(requestLogger);
 
