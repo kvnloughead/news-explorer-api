@@ -39,6 +39,8 @@ app.use((req, res) => {
 });
 app.use(handleErrors);
 
-app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT}`);
-});
+module.exports = app;
+
+// app.listen(PORT, () => {
+//   console.log(`App listening at port ${PORT}`);
+// });
