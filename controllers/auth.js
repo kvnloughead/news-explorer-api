@@ -6,7 +6,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const User = require('../models/user');
-const { ERROR_MESSAGES, STATUS_CODES } = require('../utils/constants');
+const { ERROR_MESSAGES, STATUS_CODES, DEV_KEY } = require('../utils/constants');
 
 dotenv.config();
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -50,7 +50,7 @@ module.exports.authorizeUser = (req, res, next) => {
       if (!matched) {
         throw new UnauthorizedError(ERROR_MESSAGES.badCredentials);
       }
-      const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : DEV_KEY, { expiresIn: '7d' });
       res.header('authorization', `Bearer ${token}`);
       res.cookie('token', token, { httpOnly: true });
       res.status(STATUS_CODES.ok).send({ token });
