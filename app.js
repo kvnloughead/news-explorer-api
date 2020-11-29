@@ -6,7 +6,7 @@ const path = require('path');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { handleErrors } = require('./middleware/errors.js');
-const { MONGO_SERVER_ADDRESS, ERROR_MESSAGES, STATUS_CODES } = require('./utils/constants');
+const { DB_ADDRESS, ERROR_MESSAGES, STATUS_CODES } = require('./utils/constants');
 const { limiter } = require('./middleware/limiter');
 
 const routes = require('./routes/index.js');
@@ -23,7 +23,7 @@ app.use(limiter);
 app.use(errorLogger);
 app.use(requestLogger);
 
-mongoose.connect(MONGO_SERVER_ADDRESS, {
+mongoose.connect(DB_ADDRESS, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
