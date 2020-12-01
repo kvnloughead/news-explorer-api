@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 30,
-    default: 'Dee Fawlty',
   },
   email: {
     type: String,
@@ -21,6 +20,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    minlength: 4,
+    maxlength: 15,
     select: false,
   },
 });
