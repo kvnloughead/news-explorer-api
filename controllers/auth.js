@@ -22,7 +22,8 @@ module.exports.createUser = (req, res, next) => {
       name,
       password: hash,
     }))
-    .then((user) => res.status(STATUS_CODES.created).send(user))
+    .then((user) => res.status(STATUS_CODES.created)
+      .send({ name: user.name, email: user.email, _id: user._id }))
     .catch((err) => {
       if (err.message.includes('duplicate key error')) {
         throw new BadRequestError(ERROR_MESSAGES.emailNotUnique);
