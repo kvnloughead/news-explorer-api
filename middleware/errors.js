@@ -8,7 +8,7 @@ module.exports.handleErrors = (err, req, res, next) => {
       .status(STATUS_CODES.badRequest)
       .send({ message: [...err.details.entries()][0][1].message });
   }
-  const { statusCode = STATUS_CODES.ok, message } = err;
+  const { statusCode = STATUS_CODES.internalServer, message } = err;
   res
     .status(statusCode)
     .send({
