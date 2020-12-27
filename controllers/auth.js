@@ -44,6 +44,7 @@ module.exports.authorizeUser = (req, res, next) => {
         throw new UnauthorizedError(ERROR_MESSAGES.badCredentials);
       } else {
         req._id = user._id;
+        req.username = user.name;
         return bcrypt.compare(password, user.password);
       }
     })
@@ -54,7 +55,7 @@ module.exports.authorizeUser = (req, res, next) => {
       const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : DEV_KEY, { expiresIn: '7d' });
       res.header('authorization', `Bearer ${token}`);
       res.cookie('token', token, { httpOnly: true });
-      res.status(STATUS_CODES.ok).send({ token });
+      res.status(STATUS_CODES.ok).send({ token, username: req.username });
     })
     .catch(next);
 };
