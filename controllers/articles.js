@@ -16,22 +16,22 @@ module.exports.getArticles = (req, res, next) => {
     })
     .catch(next);
 };
-
 module.exports.createArticle = (req, res, next) => {
   const {
-    keyword, title, text, date, source, link, image,
+    keyword, title, description, publishedAt, source, url, urlToImage,
   } = req.body;
   Article.create({
     keyword,
     title,
-    text,
-    date,
+    description,
+    publishedAt,
     source,
-    link,
-    image,
+    url,
+    urlToImage,
     owner: req.user._id,
   })
     .then((article) => {
+      debugger;
       res.status(STATUS_CODES.created).send(article);
     })
     .catch((err) => {
