@@ -31,10 +31,10 @@ module.exports.createArticle = (req, res, next) => {
     owner: req.user._id,
   })
     .then((article) => {
-      debugger;
       res.status(STATUS_CODES.created).send(article);
     })
     .catch((err) => {
+      console.log(err)
       if (err.name === 'ValidationError') {
         throw new BadRequestError(ERROR_MESSAGES.articleBadRequest);
       }
