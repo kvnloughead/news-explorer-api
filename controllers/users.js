@@ -9,7 +9,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.id === 'me' ? req.user._id : req.params.id).select('+password')
+  User.findById(req.params.id === 'me' ? req.user._id : req.params.id)
     .then((user) => {
       if (user) {
         res.status(STATUS_CODES.ok).send(user);
