@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { handleErrors } = require('./middleware/errors.js');
@@ -13,6 +14,8 @@ const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 
+app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
