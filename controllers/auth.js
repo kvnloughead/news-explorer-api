@@ -52,10 +52,11 @@ module.exports.authorizeUser = (req, res, next) => {
       if (!matched) {
         throw new UnauthorizedError(ERROR_MESSAGES.badCredentials);
       }
+
       const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : DEV_KEY, { expiresIn: '7d' });
       res.header('authorization', `Bearer ${token}`);
       res.cookie('token', token, { httpOnly: true });
-      res.status(STATUS_CODES.ok).send({ token, username: req.username });
+      res.status(STATUS_CODES.ok).send({ token, username: req.username, _id: req._id });
     })
     .catch(next);
 };
